@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
+
+	"github.com/IskenT/go-rest-api/internal/comment"
 	"github.com/IskenT/go-rest-api/internal/database"
 	log "github.com/sirupsen/logrus"
 )
@@ -19,6 +22,8 @@ func Run() error{
 		log.Error("failed to setup database")
 		return err
 	}
+	cmtService := comment.NewService(store)
+	fmt.Println(cmtService.GetComment(context.Background(), "b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50"))
 	return nil
 }
 func main() {
