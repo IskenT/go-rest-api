@@ -3,27 +3,37 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"github.com/IskenT/go-rest-api/internal/comment"
-	"github.com/IskenT/go-rest-api/internal/database"
+	"github.com/IskenT/go-rest-api/internal/db"
 	log "github.com/sirupsen/logrus"
 )
 
 //Run function for creating l (StartUp)
 func Run() error{
 	fmt.Println("Starting up project")
-	store, err := database.NewDatabase()
+	db, err := db.NewDatabase()
 	if err != nil {
 		log.Error("failed to setup connection to the database")
 		return err
 	}
-	err = store.MigrateDB()
-	if err != nil {
-		log.Error("failed to setup database")
+	if err := db.MigrateDB(); err != nil{
+		fmt.Println("Failed to migrate database!")
 		return err
 	}
-	cmtService := comment.NewService(store)
-	fmt.Println(cmtService.GetComment(context.Background(), "b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50"))
+	fmt.Println("Successfully connected and pinged database!")
+	cmtService := comment.NewService(db)
+	cmtService.PostComment(
+		context.Background(),
+		comment.Comment{
+			ID: "b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50",
+			Slug: "maual-test",
+			Author: "Elliot",
+			Body: "Hello World!",
+		},
+	)
+	fmt.Println(cmtService.GetComment(
+		context.Background(), 
+		"b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50"))
 	return nil
 }
 func main() {

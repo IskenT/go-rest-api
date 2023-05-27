@@ -1,4 +1,4 @@
-package database
+package db
 
 
 import (
@@ -29,13 +29,12 @@ func NewDatabase() (*Database, error) {
 		os.Getenv("SSL_MODE"),
 	)
 
-	db, err := sqlx.Connect("postgres", connectionString)
+	dbConn, err := sqlx.Connect("postgres", connectionString)
 	if err != nil {
 		return &Database{}, fmt.Errorf("could not connect to database: %w", err)
 	}
-
 	return &Database{
-		Client: db,
+		Client: dbConn,
 	}, nil
 }
 
