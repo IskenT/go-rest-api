@@ -1,9 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/IskenT/go-rest-api/internal/comment"
+	transportHttp "github.com/IskenT/go-rest-api/internal/transport/http"
 	"github.com/IskenT/go-rest-api/internal/db"
 	log "github.com/sirupsen/logrus"
 )
@@ -22,18 +22,10 @@ func Run() error{
 	}
 	fmt.Println("Successfully connected and pinged database!")
 	cmtService := comment.NewService(db)
-	cmtService.PostComment(
-		context.Background(),
-		comment.Comment{
-			ID: "b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50",
-			Slug: "maual-test",
-			Author: "Elliot",
-			Body: "Hello World!",
-		},
-	)
-	fmt.Println(cmtService.GetComment(
-		context.Background(), 
-		"b6d5a4f6-bf93-4ad7-8695-f1861d3a0d50"))
+	httpHandler:= transportHttp.NewHandler(cmtService)
+	if err:=httpHandler.Serve(); err != nil{
+		return err
+	}
 	return nil
 }
 func main() {
