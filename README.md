@@ -6,6 +6,10 @@ raw-body {"slug":"hello",
 "author":"me"}
 
 
-test:
-go test ./... -v
-go test -tags=integration ./... -v
+tests:
+--=========================integration===============
+task integration-test
+--==========================acceptance==============
+task acceptance-tests
+
+JWT token ==> missionimpossible  (generate from www.jwt.io)
