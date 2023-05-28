@@ -98,11 +98,11 @@ cmt comment.Comment,
 	}
 	rows, err := d.Client.NamedQueryContext(
 		ctx,
-		`update comments Set
-		slug = : slug,
-		author =: author,
-		body = :body
-		WHERE id =: id`,
+		`UPDATE comments SET
+		slug = :slug,
+		author = :author,
+		body = :body 
+		WHERE id = :id`,
 		cmtRow,
 	)
 	if err!=nil{
